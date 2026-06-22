@@ -15,8 +15,18 @@ Passo a passo para executar o sistema:
    - http://localhost:3333
 
 Comandos úteis:
-docker compose up --build    Sobe tudo (reconstrói imagem)
-docker compose up -d         Sobe em background
-docker compose down          Derruba os containers (dados ficam no volume)
-docker compose down -v       Derruba e apaga o volume do banco
-docker compose logs -f api   Ver logs da API em tempo real
+
+docker compose up --build    
+  Sobe tudo (reconstrói imagem)
+
+docker compose up -d         
+  Sobe em background
+
+docker compose down          
+  Derruba os containers (dados ficam no volume)
+
+docker compose down -v       
+  Derruba e apaga o volume do banco
+
+docker compose logs -f api   
+  Ver logs da API em tempo real

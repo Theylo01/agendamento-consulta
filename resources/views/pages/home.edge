@@ -1,23 +1,114 @@
-@layout()
-  <div class="hero">
-    <h1>It works — welcome to the simplicity of a Hypermedia app</h1>
-    <p>
-      A lightweight foundation for building modern web interfaces — straightforward, flexible, and true to the web's core simplicity.
-    </p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendamento de Consultas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body { background-color: #f0f4f8; }
+    .header-bar { background: linear-gradient(135deg, #0d6efd, #0a58ca); color: white; padding: 24px 0; margin-bottom: 32px; }
+  </style>
+</head>
+<body>
+  <div class="header-bar">
+    <div class="container">
+      <h1 class="mb-0 fs-3">🏥 Agendamento de Consultas Médicas</h1>
+    </div>
   </div>
 
-  <div class="cards">
-    <a href="https://insiders.adonisjs.com/docs/v7-alpha/introduction" target="_blank">
-      <h3>Official Docs &nbsp;›</h3>
-      <p>Comprehensive reference for building with AdonisJS</p>
-    </a>
-    <a href="https://adocasts.com/" target="_blank">
-      <h3>Adocasts &nbsp;›</h3>
-      <p>Guided video tutorials for everyday development</p>
-    </a>
-    <a href="https://discord.gg/vDcEjq6" target="_blank">
-      <h3>Discord &nbsp;›</h3>
-      <p>Connect with developers building with AdonisJS every day</p>
-    </a>
+  <div class="container pb-5">
+
+    @if(flashMessages.has('error'))
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        ⚠️ {{ flashMessages.get('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    @end
+
+    @if(flashMessages.has('success'))
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        ✅ {{ flashMessages.get('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    @end
+
+    {{-- Formulário de cadastro --}}
+    <div class="card shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Nova Consulta</h5>
+      </div>
+      <div class="card-body">
+        <form action="/appointments" method="POST">
+          {{ csrfField() }}
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="patient_name" class="form-label fw-semibold">Nome do Paciente</label>
+              <input type="text" class="form-control" id="patient_name" name="patient_name"
+                     placeholder="Ex: João da Silva" required />
+            </div>
+            <div class="col-md-3">
+              <label for="phone" class="form-label fw-semibold">Telefone</label>
+              <input type="tel" class="form-control" id="phone" name="phone"
+                     placeholder="(99) 99999-9999" required />
+            </div>
+            <div class="col-md-3">
+              <label for="cpf" class="form-label fw-semibold">CPF</label>
+              <input type="text" class="form-control" id="cpf" name="cpf"
+                     placeholder="000.000.000-00" required />
+            </div>
+            <div class="col-md-6">
+              <label for="appointment_date" class="form-label fw-semibold">Data e Hora da Consulta</label>
+              <input type="datetime-local" class="form-control" id="appointment_date"
+                     name="appointment_date" required />
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary px-4">
+                📅 Agendar Consulta
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {{-- Tabela de consultas --}}
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h5 class="mb-0">Consultas Agendadas</h5>
+      </div>
+      <div class="card-body p-0">
+        @if(appointments.length === 0)
+          <p class="text-muted text-center py-4 mb-0">Nenhuma consulta agendada ainda.</p>
+        @else
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Paciente</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>Data / Hora</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each(appointment in appointments)
+                <tr>
+                  <td>{{ appointment.id }}</td>
+                  <td>{{ appointment.patientName }}</td>
+                  <td>{{ appointment.cpf }}</td>
+                  <td>{{ appointment.phone }}</td>
+                  <td>{{ appointment.appointmentDate.toFormat('dd/MM/yyyy HH:mm') }}</td>
+                </tr>
+              @end
+            </tbody>
+          </table>
+        @end
+      </div>
+    </div>
+
   </div>
-@end
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -8,6 +8,20 @@ export default class AppointmentsController {
     return view.render('pages/home', { appointments })
   }
 
+  async destroy({ params, response, session }: HttpContext) {
+  const appointment = await Appointment.find(params.id)
+
+    if (!appointment) {
+      session.flash('error', 'Consulta não encontrada.')
+      return response.redirect().back()
+    }
+
+  await appointment.delete()
+
+  session.flash('success', 'Consulta removida com sucesso!')
+  return response.redirect().toRoute('home')
+  }
+
   async store({ request, response, session }: HttpContext) {
     const patientName = request.input('patient_name')
     const phone = request.input('phone')

@@ -89,6 +89,7 @@
                 <th>CPF</th>
                 <th>Telefone</th>
                 <th>Data / Hora</th>
+                <th>Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -99,6 +100,20 @@
                   <td>{{ appointment.cpf }}</td>
                   <td>{{ appointment.phone }}</td>
                   <td>{{ appointment.appointmentDate.toFormat('dd/MM/yyyy HH:mm') }}</td>
+
+                  <td>
+                    <form action="/appointments/{{ appointment.id }}/delete" method="POST">
+                      {{ csrfField() }}
+
+                      <button
+                        type="submit"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Tem certeza que deseja excluir esta consulta?')">
+                        🗑️ Excluir
+                      </button>
+                    </form>
+                  </td>
+
                 </tr>
               @end
             </tbody>
